@@ -72,8 +72,8 @@ class DOMManager {
     }
     static addStudent(id) {
         for (let classe of this.classes) {
-            if (classe._id == id) {
-                classe.students.push(new Student($(`#${classe._id}-room-name`).val(), $(`#${classe._id}-room-area`).val()));
+            if (classe.id == id) {
+                classe.students.push(new Student($(`#${classe.id}-room-name`).val(), $(`#${classe.id}-room-area`).val()));
                 ClassService.updateClass(classe)
                 .then(() => {
                     return ClassService.getAllClasses();
@@ -84,9 +84,9 @@ class DOMManager {
     }
     static deleteStudent(classId, studentId) {
         for (let classe of this.classes) {
-            if (classe._id == classId) {
-                for (let room of classe.rooms) {
-                    if (student._id == studentId) {
+            if (classe.id == classId) {
+                for (let student of classe.students) {
+                    if (student.id == studentId) {
                         classe.students.splice(classe.students.indexOf(student), 1);
                         ClassService.updateClass(classe).then(() => {
                             return ClassService.getAllClasses();
@@ -104,23 +104,23 @@ class DOMManager {
         $(`#app`).empty();
         for (let classe of classes) {
             $(`#app`).prepend(
-                `<div id="${classe._id}" class="card">
+                `<div id="${classe.id}" class="card">
                     <div class="card-header">
                         <h2>${classe.name}</h2>
-                        <button class="btn btn-danger" onclick="DOMManager.deleteClass('${classe._id}')">Delete</button>
+                        <button class="btn btn-danger" onclick="DOMManager.deleteClass('${classe.id}')">Delete</button>
                     </div>
                     <div class="card-body">
                         <div class="card">
                             <div class="row">
                                 <div class="col-sm">
-                                    <input type="text" id="${classe._id}-room-name" class="form-control" placeholder="Room Name">
+                                    <input type="text" id="${classe.id}-room-name" class="form-control" placeholder="First Name">
                                 </div>
                                 <div class="col-sm">
-                                    <input type="text" id="${classe._id}-room-area" class="form-control" placeholder="Room Area">
+                                    <input type="text" id="${classe.id}-room-area" class="form-control" placeholder="Last Name">
                                 </div>
 
                             </div>
-                            <button id="${classe._id}-new-room" onclick="DOMManager.addStudent('${classe._id}')" class="btn btn-primary form-control">Add</button>
+                            <button id="${classe.id}-new-room" onclick="DOMManager.addStudent('${classe.id}')" class="btn btn-primary form-control">Add</button>
 
                         </div>
                     </div>
@@ -129,11 +129,11 @@ class DOMManager {
 
             ); 
             for (let student of classe.students) {
-                $(`#${classe._id}`).find(`.card-body`).append(
+                $(`#${classe.id}`).find(`.card-body`).append(
                     `<p>
-                    <span id="firstName-${student._id}"><strong>First Name:</strong> ${student.firstName}</span>
-                    <span id="lastname-${student._id}"><strong>Last Name:</strong> ${student.lastName}</span>
-                    <button class="btn btn-danger" onclick="DOMManager.deleteStudent('${classe._id}', '${student._id}')">Delete Student</button>
+                    <span id="firstName-${student.id}"><strong>First Name:</strong> ${student.firstName}</span>
+                    <span id="lastname-${student.id}"><strong>Last Name:</strong> ${student.lastName}</span>
+                    <button class="btn btn-danger" onclick="DOMManager.deleteStudent('${classe.id}',  '${student.id}')">Delete Student</button>
                     </p>`
                 )
                
